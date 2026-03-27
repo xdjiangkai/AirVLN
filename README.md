@@ -191,6 +191,7 @@ Please see the examples in [scripts](https://github.com/AirVLN/AirVLN/tree/main/
 
 If the solutions above do not help, you can [open an issue](https://github.com/AirVLN/AirVLN/issues) or [contact us via email](#contact).
 
+3. run AirVLN/UE4 on gpufree.com
 ```bash
 # run_airvln.sh (place this file under /root/, then: chmod +x /root/run_airvln.sh)
 cat > /root/run_airvln.sh <<'EOF'
@@ -218,7 +219,7 @@ EOF
 /root/run_airvln.sh
 ```
 
-### Why this script is needed
+### Why the above script is needed
 
 - **AirVLN/UE4 refuses to run as `root`** on many setups (the binary exits with "Refusing to run with the root privileges.").  
   This launcher keeps the GUI login as `root` (as required by the rented server), but runs the simulator **as the unprivileged `ubuntu` user**.
