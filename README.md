@@ -193,6 +193,16 @@ If the solutions above do not help, you can [open an issue](https://github.com/A
 
 3. run AirVLN/UE4 on gpufree.com
 ```bash
+export DISPLAY=:20.0
+export XDG_RUNTIME_DIR=/tmp/xdg-runtime-$(id -u)
+mkdir -p "$XDG_RUNTIME_DIR"; chmod 700 "$XDG_RUNTIME_DIR"
+cd /root/gpufree-data/env_1/env_1/LinuxNoEditor
+./AirVLN.sh -opengl4 -windowed -ResX=1280 -ResY=720 -stdout -FullStdOutLogOutput
+```
+
+OR
+
+```bash
 # run_airvln.sh (place this file under /root/, then: chmod +x /root/run_airvln.sh)
 cat > /root/run_airvln.sh <<'EOF'
 #!/bin/sh
