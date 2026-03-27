@@ -193,7 +193,23 @@ If the solutions above do not help, you can [open an issue](https://github.com/A
 
 3. run AirVLN/UE4 on gpufree.com
 ```bash
+chown -R ubuntu:ubuntu /root/
+
+# 1) 建 conda 组
+groupadd conda || true
+
+# 2) /opt/conda 交给 conda 组管理写权限
+chgrp -R conda /opt/conda
+chmod -R g+rwX /opt/conda
+find /opt/conda -type d -exec chmod g+s {} \;
+
+# 3) 把 ubuntu 加入 conda 组
+usermod -aG conda ubuntu
+```
+```bash
 su - ubuntu -c
+conda activate AirVLN
+cd /root/gpufree-data/env_1/env_1/LinuxNoEditor/ 
 export DISPLAY=:20.0
 export XDG_RUNTIME_DIR=/tmp/xdg-runtime-$(id -u)
 mkdir -p "$XDG_RUNTIME_DIR"; chmod 700 "$XDG_RUNTIME_DIR"
