@@ -193,6 +193,7 @@ If the solutions above do not help, you can [open an issue](https://github.com/A
 
 3. run AirVLN/UE4 on gpufree.com
 ```bash
+su - ubuntu -c
 export DISPLAY=:20.0
 export XDG_RUNTIME_DIR=/tmp/xdg-runtime-$(id -u)
 mkdir -p "$XDG_RUNTIME_DIR"; chmod 700 "$XDG_RUNTIME_DIR"
