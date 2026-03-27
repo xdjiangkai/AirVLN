@@ -191,6 +191,46 @@ Please see the examples in [scripts](https://github.com/AirVLN/AirVLN/tree/main/
 
 If the solutions above do not help, you can [open an issue](https://github.com/AirVLN/AirVLN/issues) or [contact us via email](#contact).
 
+```bash
+# run_airvln.sh (place this file under /root/, then: chmod +x /root/run_airvln.sh)
+cat > /root/run_airvln.sh <<'EOF'
+#!/bin/sh
+set -eu
+
+# X11 display used by the root desktop session (in this server it's usually :20.0)
+DISPLAY_NUM="${DISPLAY_NUM:-:20.0}"
+
+# AirVLN packaged UE4 LinuxNoEditor directory
+APP_DIR="/root/gpufree-data/env_1/env_1/LinuxNoEditor"
+
+# Run the UE4 binary as a non-root user (AirVLN/UE4 may refuse to run as root).
+# Keep using root's X11 desktop by exporting DISPLAY, so the window shows on the root GUI session.
+exec su - ubuntu -c "
+export DISPLAY=${DISPLAY_NUM}
+export XDG_RUNTIME_DIR=/tmp/xdg-runtime-\$(id -u)
+mkdir -p \"\$XDG_RUNTIME_DIR\" && chmod 700 \"\$XDG_RUNTIME_DIR\"
+cd ${APP_DIR}
+./AirVLN.sh -opengl4 -windowed -ResX=1280 -ResY=720 -stdout -FullStdOutLogOutput
+"
+EOF
+
+# Start AirVLN
+/root/run_airvln.sh
+```
+
+### Why this script is needed
+
+- **AirVLN/UE4 refuses to run as `root`** on many setups (the binary exits with "Refusing to run with the root privileges.").  
+  This launcher keeps the GUI login as `root` (as required by the rented server), but runs the simulator **as the unprivileged `ubuntu` user**.
+
+- **The server GUI uses X11 (`DISPLAY=:20.0`)**.  
+  Exporting `DISPLAY` lets the `ubuntu` process connect to the same X server, so the AirVLN window appears on the root desktop.
+
+- **Containers often miss `XDG_RUNTIME_DIR`**, which causes repeated warnings and can break some desktop-related components.  
+  We create a per-user runtime dir under `/tmp` with correct permissions (`0700`) to satisfy XDG/SDL expectations.
+
+- **`-opengl4` is used for better compatibility** in remote-desktop / virtualized X11 environments where Vulkan may black-screen.
+
 ## 📜 **Citing**
 If you use AerialVLN in your research, please cite the following paper:
 
